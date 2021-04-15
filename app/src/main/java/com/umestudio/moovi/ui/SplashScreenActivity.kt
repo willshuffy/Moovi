@@ -1,4 +1,4 @@
-package com.umestudio.moovi
+package com.umestudio.moovi.ui
 
 import android.content.Intent
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.WindowManager
+import com.umestudio.moovi.R
 
 class SplashScreenActivity : AppCompatActivity() {
 

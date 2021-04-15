@@ -1,4 +1,7 @@
 package com.umestudio.moovi.model
 
-class MovieResponse {
-}
+data class MovieResponse(
+
+    val total_pages: Int?,
+    val results: List<MovieModel>
+)

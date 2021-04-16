@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Adapter
+import android.widget.GridLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import com.umestudio.moovi.R
+import com.umestudio.moovi.adapter.MainAdapter
 import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.MovieResponse
 import com.umestudio.moovi.retrofit.ApiService
@@ -17,15 +21,28 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     private val TAG: String = "MainActivity"
 
+    lateinit var mainAdapter: MainAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setupRecyclerView()
     }
 
     override fun onStart() {
         super.onStart()
 
         getMovie()
+    }
+
+    private fun setupRecyclerView(){
+
+        mainAdapter = MainAdapter(arrayListOf())
+        rv_main.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = mainAdapter
+        }
     }
 
     fun getMovie(){
@@ -65,12 +82,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showMovie(response: MovieResponse){
-        Log.d(TAG, "responseMovie : $response")
-        Log.d(TAG, "total_pages : ${response.total_pages}")
+//        Log.d(TAG, "responseMovie : $response")
+//        Log.d(TAG, "total_pages : ${response.total_pages}")
+//
+//        for (movie in response.results){
+//            Log.d(TAG, "movie_title : ${movie.title}")
+//        }
 
-        for (movie in response.results){
-            Log.d(TAG, "movie_title : ${movie.title}")
-        }
+        mainAdapter.setData(response.results)
     }
 
     fun  showMessage(msg: String){

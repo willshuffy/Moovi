@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umestudio.moovi.R
 import com.umestudio.moovi.model.MovieModel
+import kotlinx.android.synthetic.main.item_movie.view.*
 
 /*
     STEP 1 : - buat properties pada constructor
@@ -36,9 +37,9 @@ class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainA
                  - tambahkan function
      */
 
-    class viewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class viewHolder(val view: View): RecyclerView.ViewHolder(view) {
         fun bind(movies: MovieModel){
-
+            view.tv_title.text = movies.title
         }
 
     }

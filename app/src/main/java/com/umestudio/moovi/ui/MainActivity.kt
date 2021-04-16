@@ -3,11 +3,13 @@ package com.umestudio.moovi.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.umestudio.moovi.R
 import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.MovieResponse
 import com.umestudio.moovi.retrofit.ApiService
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,9 +30,12 @@ class MainActivity : AppCompatActivity() {
 
     fun getMovie(){
 
+        showLoading(true)
         ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, 1)
             .enqueue(object : Callback<MovieResponse>{
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+
+                    showLoading(false)
                     /*
                         cek error koneksi API dengan Log di bawah ini
                      */
@@ -42,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                     call: Call<MovieResponse>,
                     response: Response<MovieResponse>
                 ) {
+                    showLoading(false)
                     if (response.isSuccessful){
                         showMovie(response.body()!!)
                     }
@@ -49,6 +55,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    fun showLoading(loading: Boolean){
+        when(loading){
+            true -> pb_main.visibility = View.VISIBLE
+            false -> pb_main.visibility = View.GONE
+        }
     }
 
     fun showMovie(response: MovieResponse){

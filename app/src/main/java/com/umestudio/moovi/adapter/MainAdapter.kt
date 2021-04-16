@@ -42,4 +42,15 @@ class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainA
         }
 
     }
+
+    /*
+        STEP 4 : - tambahkan function setData (untuk mengset data API dan mereload data baru pada
+                    recyclerview)
+     */
+
+    fun setData(loadMovies: List<MovieModel>){
+        movies.clear()
+        movies.addAll(loadMovies)
+        notifyDataSetChanged()
+    }
 }

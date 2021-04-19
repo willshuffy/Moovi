@@ -4,7 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import com.umestudio.moovi.R
+import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.MovieModel
 import kotlinx.android.synthetic.main.item_movie.view.*
 
@@ -40,6 +43,23 @@ class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainA
     class viewHolder(val view: View): RecyclerView.ViewHolder(view) {
         fun bind(movies: MovieModel){
             view.tv_title.text = movies.title
+            val posterPath = Constant.POSTER_PATH + movies.poster_path
+
+            //with picasso
+//            Picasso.get()
+//                .load(posterPath)
+//                .placeholder(R.drawable.placeholder_portrait)
+//                .error(R.drawable.placeholder_portrait)
+//                .into(view.iv_poster)
+
+
+            //with glide
+            Glide
+                .with(view)
+                .load(posterPath)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder_portrait)
+                .into(view.iv_poster)
         }
 
     }

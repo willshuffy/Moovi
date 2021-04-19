@@ -21,10 +21,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+const val movieNowPlaying = 0
+const val movieUpcming = 1
+
 class MainActivity : AppCompatActivity() {
     private val TAG: String = "MainActivity"
 
     lateinit var mainAdapter: MainAdapter
+    private var movieCategory = 0
+    private var api = ApiService().endpoint
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +60,18 @@ class MainActivity : AppCompatActivity() {
     fun getMovie() {
 
         showLoading(true)
-        ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, 1)
+
+        var apiCall: Call<MovieResponse>? = null
+        when(movieCategory){
+            movieNowPlaying -> {
+                apiCall = api.getMovieNowPlaying(Constant.API_KEY, 1)
+            }
+            movieUpcming -> {
+                apiCall = api.getMovieUpcoming(Constant.API_KEY, 1)
+            }
+        }
+
+        apiCall!!
             .enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
@@ -113,11 +129,15 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
 
                 R.id.select_nowplaying -> {
-                    showMessage("Now Playing Selected")
+                    showMessage("Movie Now Playing")
+                    movieCategory = movieNowPlaying
+                    getMovie()
                     true
                 }
                 R.id.select_upcoming -> {
-                    showMessage("Upcoming Selected")
+                    showMessage("Movie Upcoming")
+                    movieCategory = movieUpcming
+                    getMovie()
                     true
                 }
 

@@ -3,9 +3,12 @@ package com.umestudio.moovi.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
 import android.widget.GridLayout
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umestudio.moovi.R
@@ -28,6 +31,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupRecyclerView()
+
+        iv_menus.setOnClickListener{
+            showMenu(iv_menus)
+        }
     }
 
     override fun onStart() {
@@ -36,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         getMovie()
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
 
         mainAdapter = MainAdapter(arrayListOf())
         rv_main.apply {
@@ -45,11 +52,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getMovie(){
+    fun getMovie() {
 
         showLoading(true)
         ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, 1)
-            .enqueue(object : Callback<MovieResponse>{
+            .enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
                     showLoading(false)
@@ -65,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     response: Response<MovieResponse>
                 ) {
                     showLoading(false)
-                    if (response.isSuccessful){
+                    if (response.isSuccessful) {
                         showMovie(response.body()!!)
                     }
 
@@ -74,14 +81,14 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    fun showLoading(loading: Boolean){
-        when(loading){
+    fun showLoading(loading: Boolean) {
+        when (loading) {
             true -> pb_main.visibility = View.VISIBLE
             false -> pb_main.visibility = View.GONE
         }
     }
 
-    fun showMovie(response: MovieResponse){
+    fun showMovie(response: MovieResponse) {
 //        Log.d(TAG, "responseMovie : $response")
 //        Log.d(TAG, "total_pages : ${response.total_pages}")
 //
@@ -92,7 +99,32 @@ class MainActivity : AppCompatActivity() {
         mainAdapter.setData(response.results)
     }
 
-    fun  showMessage(msg: String){
+    fun showMessage(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showMenu(view: View) {
+
+        val menus = PopupMenu(this, view)
+        menus.inflate(R.menu.main_menu)
+
+        menus.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem ->
+
+            when (item.itemId) {
+
+                R.id.select_nowplaying -> {
+                    showMessage("Now Playing Selected")
+                    true
+                }
+                R.id.select_upcoming -> {
+                    showMessage("Upcoming Selected")
+                    true
+                }
+
+                else -> super.onOptionsItemSelected(item)
+            }
+
+        })
+        menus.show()
     }
 }

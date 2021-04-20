@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_movie.view.*
              - alt+enter pada viewHolder
              - buat class viewHolder
  */
-class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainAdapter.viewHolder>() {
+class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListener): RecyclerView.Adapter<MainAdapter.viewHolder>() {
 
     /*
         STEP 3 : - alt+enter pada class MainAdapter
@@ -32,7 +32,12 @@ class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainA
     override fun getItemCount() = movies.size
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
+        val movie = movies[position]
         holder.bind(movies[position])
+
+        holder.view.iv_poster.setOnClickListener {
+            listener.onClick(movie)
+        }
     }
 
     /*
@@ -73,5 +78,9 @@ class MainAdapter(var movies: ArrayList<MovieModel>): RecyclerView.Adapter<MainA
         movies.clear()
         movies.addAll(loadMovies)
         notifyDataSetChanged()
+    }
+
+    interface OnAdapterListener{
+        fun onClick(clickmovies: MovieModel)
     }
 }

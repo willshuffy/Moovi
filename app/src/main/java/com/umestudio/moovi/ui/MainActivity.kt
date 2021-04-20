@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.MainAdapter
 import com.umestudio.moovi.model.Constant
+import com.umestudio.moovi.model.MovieModel
 import com.umestudio.moovi.model.MovieResponse
 import com.umestudio.moovi.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,7 +51,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
 
-        mainAdapter = MainAdapter(arrayListOf())
+        mainAdapter = MainAdapter(arrayListOf(), object : MainAdapter.OnAdapterListener{
+            override fun onClick(clickmovies: MovieModel) {
+                showMessage(clickmovies.title!!)
+                /*
+                    cek listener : - run apps
+                                   - click movies and show toast
+                 */
+            }
+
+        })
+
         rv_main.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter

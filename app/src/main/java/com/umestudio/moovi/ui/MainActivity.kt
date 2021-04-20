@@ -1,5 +1,6 @@
 package com.umestudio.moovi.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity() {
                     cek listener : - run apps
                                    - click movies and show toast
                  */
+                //==================================================================================
+
+                Constant.MOVIE_ID = clickmovies.id!!
+                Constant.MOVIE_TITLE = clickmovies.title!!
+                startActivity(Intent(applicationContext, DetailActivity::class.java))
             }
 
         })

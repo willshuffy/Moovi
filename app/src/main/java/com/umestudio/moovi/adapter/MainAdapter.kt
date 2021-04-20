@@ -32,11 +32,10 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
     override fun getItemCount() = movies.size
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
-        val movie = movies[position]
         holder.bind(movies[position])
 
         holder.view.iv_poster.setOnClickListener {
-            listener.onClick(movie)
+            listener.onClick(movies[position])
         }
     }
 

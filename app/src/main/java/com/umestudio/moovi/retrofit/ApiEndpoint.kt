@@ -1,8 +1,10 @@
 package com.umestudio.moovi.retrofit
 
+import com.umestudio.moovi.model.DetailResponse
 import com.umestudio.moovi.model.MovieResponse
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiEndpoint {
@@ -18,4 +20,10 @@ interface ApiEndpoint {
         @Query("api_key") api_key: String,
         @Query("page") page: Int
     ): Call<MovieResponse>
+
+    @GET("{movie_id}")
+    fun getMovieDetail(
+        @Path("movie_id") movie_id: String,
+        @Query("api_key") api_key: String
+    ): Call<DetailResponse>
 }

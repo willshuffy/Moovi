@@ -94,4 +94,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="genre">genre</string>
+    <string name="play_trailer">Play Trailer</string>
+    <string name="overview">Overview</string>
+    <string name="overview_konten">Ini adalah overview film</string>
 </resources>

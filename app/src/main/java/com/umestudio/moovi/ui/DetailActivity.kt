@@ -1,5 +1,6 @@
 package com.umestudio.moovi.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
@@ -23,6 +24,7 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
+        setupListener()
     }
 
     override fun onStart() {
@@ -37,6 +39,12 @@ class DetailActivity : AppCompatActivity() {
 
         supportActionBar!!.title = ""
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun setupListener(){
+        fab_trailer.setOnClickListener {
+            startActivity(Intent(applicationContext, TrailerActivity::class.java))
+        }
     }
 
     private fun getMovieDetail(){

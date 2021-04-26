@@ -1,10 +1,13 @@
 package com.umestudio.moovi.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.TrailerAdapter
 import com.umestudio.moovi.model.Constant
@@ -15,17 +18,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class TrailerActivity : AppCompatActivity() {
 
     private val TAG: String = "TrailerActivity"
 
     lateinit var trailerAdapter: TrailerAdapter
+    lateinit var youTubePlayer: YouTubePlayer
+    private var youtubeKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trailer)
         setupView()
-        setupListener()
         setupRecyclerView()
     }
 
@@ -36,21 +41,29 @@ class TrailerActivity : AppCompatActivity() {
 
     private fun setupView(){
 
-    }
+        val youTubePlayerView =
+            findViewById<YouTubePlayerView>(R.id.youtube_player_view)
+        lifecycle.addObserver(youTubePlayerView)
 
-    private fun setupListener(){
-
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(player: YouTubePlayer) {
+                youTubePlayer = player
+                youtubeKey?.let {
+                    youTubePlayer.cueVideo(it, 0f)
+                }
+            }
+        })
     }
 
     private fun setupRecyclerView() {
 
         trailerAdapter = TrailerAdapter(arrayListOf(), object : TrailerAdapter.OnAdapterListener{
             override fun onLoad(key: String) {
-
+                youtubeKey = key
             }
 
             override fun onPlay(key: String) {
-
+                    youTubePlayer.loadVideo(key, 0f)
             }
 
 
@@ -59,6 +72,7 @@ class TrailerActivity : AppCompatActivity() {
         rv_trailer.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = trailerAdapter
+            setHasFixedSize(true)
         }
     }
 
@@ -67,6 +81,7 @@ class TrailerActivity : AppCompatActivity() {
         ApiService().endpoint.getMovieTrailer(Constant.MOVIE_ID, Constant.API_KEY)
             .enqueue(object : Callback<TrailerResponse>{
                 override fun onFailure(call: Call<TrailerResponse>, t: Throwable) {
+                    Log.d(TAG, t.toString())
                     showLoading(false)
                 }
 
@@ -74,8 +89,9 @@ class TrailerActivity : AppCompatActivity() {
                     call: Call<TrailerResponse>,
                     response: Response<TrailerResponse>
                 ) {
-                    showLoading(false)
+
                     if (response.isSuccessful){
+                        showLoading(false)
                         showTrailer(response.body()!!)
                     }
                 }
@@ -95,6 +111,8 @@ class TrailerActivity : AppCompatActivity() {
     }
 
     private fun showTrailer(trailer: TrailerResponse){
-        trailerAdapter.setData(trailer.results)
+        trailer?.let {
+            trailerAdapter.setData(trailer.results)
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umestudio.moovi.R
-import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.TrailerModel
 import kotlinx.android.synthetic.main.item_trailer.view.*
 
@@ -27,7 +26,7 @@ class TrailerAdapter(var videos: ArrayList<TrailerModel>, var listener: OnAdapte
         }
     }
 
-    inner class viewHolder(val view: View): RecyclerView.ViewHolder(view) {
+ class viewHolder(val view: View): RecyclerView.ViewHolder(view) {
         fun bind(trailer: TrailerModel){
             view.tv_trailer.text = trailer.name
         }

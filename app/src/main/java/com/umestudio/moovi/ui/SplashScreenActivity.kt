@@ -9,6 +9,7 @@ import android.os.Handler
 import android.view.View
 import android.view.WindowManager
 import com.umestudio.moovi.R
+import com.umestudio.moovi.fragment.HomeActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
         initStatusBar()
 
         Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
             finish()
         },3000)
     }

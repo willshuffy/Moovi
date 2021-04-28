@@ -52,14 +52,6 @@ class NowPlayingFragment : Fragment() {
         mainAdapter = MainAdapter(arrayListOf(), object : MainAdapter.OnAdapterListener{
             override fun onClick(clickmovies: MovieModel) {
                 showMessage(clickmovies.title!!)
-                /*
-                    cek listener : - run apps
-                                   - click movies and show toast
-                 */
-                //==================================================================================
-
-                Constant.MOVIE_ID = clickmovies.id!!
-                Constant.MOVIE_TITLE = clickmovies.title!!
                 startActivity(Intent(requireContext(), DetailActivity::class.java))
             }
 

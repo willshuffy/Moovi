@@ -35,6 +35,8 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
         holder.bind(movies[position])
 
         holder.view.iv_poster.setOnClickListener {
+            Constant.MOVIE_ID = movies[position].id!!
+            Constant.MOVIE_TITLE = movies[position].title!!
             listener.onClick(movies[position])
         }
     }

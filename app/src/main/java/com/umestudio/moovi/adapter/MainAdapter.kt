@@ -81,6 +81,11 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
         notifyDataSetChanged()
     }
 
+    fun setDataNextPage(loadMovies: List<MovieModel>){
+        movies.addAll(loadMovies)
+        notifyDataSetChanged()
+    }
+
     interface OnAdapterListener{
         fun onClick(clickmovies: MovieModel)
     }

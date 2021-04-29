@@ -11,6 +11,7 @@ import android.widget.Adapter
 import android.widget.GridLayout
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.MainAdapter
@@ -32,22 +33,24 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainAdapter: MainAdapter
     private var movieCategory = 0
     private var api = ApiService().endpoint
+    private var isScrolling = false
+    private var currentPage = 1
+    private var totalPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupRecyclerView()
+        setupListener()
 
-        iv_menus.setOnClickListener{
-            showMenu(iv_menus)
-        }
     }
 
     override fun onStart() {
         super.onStart()
 
         getMovie()
+        showLoadingNextPage(false)
     }
 
     private fun setupRecyclerView() {
@@ -74,8 +77,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getMovie() {
+    private fun setupListener(){
+        iv_menus.setOnClickListener{
+            showMenu(iv_menus)
+        }
 
+        scroll_main.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+            override fun onScrollChange(
+                v: NestedScrollView?,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
+                if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight){ //untuk memastikan scroll nya sudah mentok ke konten paling bawah
+                    if (!isScrolling){
+                        if (currentPage <= totalPage ){
+                            getMovieNextPage()
+                        }
+                    }
+                }
+            }
+
+        })
+    }
+
+    private fun getMovie() {
+
+        scroll_main.scrollTo(0,0)
+        currentPage = 1
         showLoading(true)
 
         var apiCall: Call<MovieResponse>? = null
@@ -114,6 +144,47 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    private fun getMovieNextPage() {
+
+        currentPage += 1
+        showLoadingNextPage(true)
+
+        var apiCall: Call<MovieResponse>? = null
+        when(movieCategory){
+            movieNowPlaying -> {
+                apiCall = api.getMovieNowPlaying(Constant.API_KEY, currentPage)
+            }
+            movieUpcming -> {
+                apiCall = api.getMovieUpcoming(Constant.API_KEY, currentPage)
+            }
+        }
+
+        apiCall!!
+            .enqueue(object : Callback<MovieResponse> {
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+
+                    showLoadingNextPage(false)
+                    /*
+                        cek error koneksi API dengan Log di bawah ini
+                     */
+                    Log.d(TAG, "errorMessage : $t")
+
+                }
+
+                override fun onResponse(
+                    call: Call<MovieResponse>,
+                    response: Response<MovieResponse>
+                ) {
+                    showLoadingNextPage(false)
+                    if (response.isSuccessful) {
+                        showMovieNextPage(response.body()!!)
+                    }
+
+                }
+
+            })
+    }
+
     fun showLoading(loading: Boolean) {
         when (loading) {
             true -> pb_main.visibility = View.VISIBLE
@@ -121,15 +192,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showMovie(response: MovieResponse) {
-//        Log.d(TAG, "responseMovie : $response")
-//        Log.d(TAG, "total_pages : ${response.total_pages}")
-//
-//        for (movie in response.results){
-//            Log.d(TAG, "movie_title : ${movie.title}")
-//        }
+    fun showLoadingNextPage(loading: Boolean) {
+        when (loading) {
+            true -> {
+                isScrolling = true
+                pb_main_next_page.visibility = View.VISIBLE
+            }
+            false -> {
+                isScrolling = false
+                pb_main_next_page.visibility = View.GONE
+            }
+        }
+    }
 
+    fun showMovie(response: MovieResponse) {
+        totalPage = response.total_pages!!.toInt()
         mainAdapter.setData(response.results)
+    }
+
+    fun showMovieNextPage(response: MovieResponse) {
+        totalPage = response.total_pages!!.toInt()
+        mainAdapter.setDataNextPage(response.results)
+        showMessage("Page $currentPage")
     }
 
     fun showMessage(msg: String) {

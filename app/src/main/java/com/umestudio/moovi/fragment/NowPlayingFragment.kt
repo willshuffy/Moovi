@@ -9,22 +9,20 @@ import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.MainAdapter
+import com.umestudio.moovi.databinding.FragmentNowPlayingBinding
 import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.MovieModel
 import com.umestudio.moovi.model.MovieResponse
 import com.umestudio.moovi.retrofit.ApiService
 import com.umestudio.moovi.ui.DetailActivity
-import kotlinx.android.synthetic.main.fragment_now_playing.*
-import kotlinx.android.synthetic.main.fragment_now_playing.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class NowPlayingFragment : Fragment() {
 
-    lateinit var v: View
+    lateinit var binding: FragmentNowPlayingBinding
     lateinit var mainAdapter: MainAdapter
     private var isScrolling = false
     private var currentPage = 1
@@ -35,9 +33,8 @@ class NowPlayingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_now_playing, container, false)
-
-        return v
+        binding = FragmentNowPlayingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +61,7 @@ class NowPlayingFragment : Fragment() {
 
         })
 
-        v.rv_nowPlaying.apply {
+        binding.rvNowPlaying.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter
         }
@@ -72,7 +69,7 @@ class NowPlayingFragment : Fragment() {
 
     private fun setupListener(){
 
-        v.scroll_nowPlaying.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+        binding.scrollNowPlaying.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
             override fun onScrollChange(
                 v: NestedScrollView?,
                 scrollX: Int,
@@ -98,7 +95,7 @@ class NowPlayingFragment : Fragment() {
 
     fun getMovieNowPlaying() {
 
-        scroll_nowPlaying.scrollTo(0,0)
+        binding.scrollNowPlaying.scrollTo(0,0)
         currentPage = 1
         showLoading(true)
         ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, 1)
@@ -151,8 +148,8 @@ class NowPlayingFragment : Fragment() {
 
     fun showLoading(loading: Boolean) {
         when (loading) {
-            true -> v.pb_nowPlaying.visibility = View.VISIBLE
-            false -> v.pb_nowPlaying.visibility = View.GONE
+            true -> binding.pbNowPlaying.visibility = View.VISIBLE
+            false -> binding.pbNowPlaying.visibility = View.GONE
         }
     }
 
@@ -160,11 +157,11 @@ class NowPlayingFragment : Fragment() {
         when (loading) {
             true -> {
                 isScrolling = true
-                v.pb_nowPlaying_next_page.visibility = View.VISIBLE
+                binding.pbNowPlayingNextPage.visibility = View.VISIBLE
             }
             false -> {
                 isScrolling = false
-                v.pb_nowPlaying_next_page.visibility = View.GONE
+                binding.pbNowPlayingNextPage.visibility = View.GONE
             }
         }
     }

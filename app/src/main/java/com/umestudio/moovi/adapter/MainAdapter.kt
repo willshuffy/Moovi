@@ -1,15 +1,13 @@
 package com.umestudio.moovi.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.umestudio.moovi.R
+import com.umestudio.moovi.databinding.ItemMovieBinding
 import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.MovieModel
-import kotlinx.android.synthetic.main.item_movie.view.*
 
 /*
     STEP 1 : - buat properties pada constructor
@@ -25,7 +23,7 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
      */
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)= viewHolder (
-        LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+        ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
 
@@ -34,7 +32,7 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         holder.bind(movies[position])
 
-        holder.view.iv_poster.setOnClickListener {
+        holder.binding.ivPoster.setOnClickListener {
             Constant.MOVIE_ID = movies[position].id!!
             Constant.MOVIE_TITLE = movies[position].title!!
             listener.onClick(movies[position])
@@ -46,10 +44,11 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
                  - tambahkan function
      */
 
-    class viewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    class viewHolder(val binding: ItemMovieBinding ): RecyclerView.ViewHolder(binding.root) {
         fun bind(movies: MovieModel){
-            view.tv_title.text = movies.title
+
             val posterPath = Constant.POSTER_PATH + movies.poster_path
+            binding.tvTitle.text = movies.title
 
             //with picasso
 //            Picasso.get()
@@ -61,11 +60,11 @@ class MainAdapter(var movies: ArrayList<MovieModel>,var listener: OnAdapterListe
 
             //with glide
             Glide
-                .with(view)
+                .with(binding.root)
                 .load(posterPath)
                 .centerCrop()
                 .placeholder(R.drawable.placeholder_portrait)
-                .into(view.iv_poster)
+                .into(binding.ivPoster)
         }
 
     }

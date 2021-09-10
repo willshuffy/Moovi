@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.umestudio.moovi.BuildConfig
 import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.TrailerAdapter
 import com.umestudio.moovi.model.Constant
@@ -78,7 +79,7 @@ class TrailerActivity : AppCompatActivity() {
 
     private fun getMovieTrailer(){
         showLoading(true)
-        ApiService().endpoint.getMovieTrailer(Constant.MOVIE_ID, Constant.API_KEY)
+        ApiService().endpoint.getMovieTrailer(Constant.MOVIE_ID, BuildConfig.MOA_KEY)
             .enqueue(object : Callback<TrailerResponse>{
                 override fun onFailure(call: Call<TrailerResponse>, t: Throwable) {
                     Log.d(TAG, t.toString())

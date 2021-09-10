@@ -1,7 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id "com.google.android.secrets-gradle-plugin" version "1.1.0"
+}
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.1"

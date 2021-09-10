@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity" />
+
+        <meta-data
+            android:name="com.umestudio.moovi.API_KEY"
+            android:value="${MOA_KEY}"/>
     </application>
 
 </manifest>

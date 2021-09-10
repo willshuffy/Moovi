@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.umestudio.moovi.BuildConfig
 import com.umestudio.moovi.R
 import com.umestudio.moovi.model.Constant
 import com.umestudio.moovi.model.DetailResponse
@@ -49,7 +50,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun getMovieDetail(){
 
-        ApiService().endpoint.getMovieDetail(Constant.MOVIE_ID, Constant.API_KEY)
+        ApiService().endpoint.getMovieDetail(Constant.MOVIE_ID, BuildConfig.MOA_KEY)
             .enqueue(object : Callback<DetailResponse>{
                 override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
                     Log.d(TAG, t.toString())

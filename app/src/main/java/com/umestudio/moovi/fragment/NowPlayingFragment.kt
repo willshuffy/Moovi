@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.umestudio.moovi.BuildConfig
 import com.umestudio.moovi.adapter.MainAdapter
 import com.umestudio.moovi.databinding.FragmentNowPlayingBinding
 import com.umestudio.moovi.model.Constant
@@ -98,7 +99,7 @@ class NowPlayingFragment : Fragment() {
         binding.scrollNowPlaying.scrollTo(0,0)
         currentPage = 1
         showLoading(true)
-        ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, 1)
+        ApiService().endpoint.getMovieNowPlaying(BuildConfig.MOA_KEY, 1)
             .enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
@@ -124,7 +125,7 @@ class NowPlayingFragment : Fragment() {
 
         currentPage += 1
         showLoadingNextPage(true)
-        ApiService().endpoint.getMovieNowPlaying(Constant.API_KEY, currentPage)
+        ApiService().endpoint.getMovieNowPlaying(BuildConfig.MOA_KEY, currentPage)
             .enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 

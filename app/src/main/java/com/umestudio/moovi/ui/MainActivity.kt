@@ -13,6 +13,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
+import com.umestudio.moovi.BuildConfig
 import com.umestudio.moovi.R
 import com.umestudio.moovi.adapter.MainAdapter
 import com.umestudio.moovi.model.Constant
@@ -111,10 +112,10 @@ class MainActivity : AppCompatActivity() {
         var apiCall: Call<MovieResponse>? = null
         when(movieCategory){
             movieNowPlaying -> {
-                apiCall = api.getMovieNowPlaying(Constant.API_KEY, 1)
+                apiCall = api.getMovieNowPlaying(BuildConfig.MOA_KEY, 1)
             }
             movieUpcming -> {
-                apiCall = api.getMovieUpcoming(Constant.API_KEY, 1)
+                apiCall = api.getMovieUpcoming(BuildConfig.MOA_KEY, 1)
             }
         }
 
@@ -152,10 +153,10 @@ class MainActivity : AppCompatActivity() {
         var apiCall: Call<MovieResponse>? = null
         when(movieCategory){
             movieNowPlaying -> {
-                apiCall = api.getMovieNowPlaying(Constant.API_KEY, currentPage)
+                apiCall = api.getMovieNowPlaying(BuildConfig.MOA_KEY, currentPage)
             }
             movieUpcming -> {
-                apiCall = api.getMovieUpcoming(Constant.API_KEY, currentPage)
+                apiCall = api.getMovieUpcoming(BuildConfig.MOA_KEY, currentPage)
             }
         }
 
